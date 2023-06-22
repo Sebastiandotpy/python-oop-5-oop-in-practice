@@ -1,9 +1,19 @@
 import unittest
-from abc import ABC
+from abc import ABC, abstractmethod
 from worker import Worker, Programmer, Janitor
+from color import ColorScheme
+from colorama import init
 
+# Initialize colorama
+init()
+
+# Define the color scheme with transitioning colors
+color_scheme = ColorScheme(colors=["RED", "GREEN", "YELLOW", "BLUE", "MAGENTA", "CYAN"])
 
 class TestWorker(unittest.TestCase):
+    def setUp(self):
+        self.color_scheme = color_scheme
+
     def test_0_worker_abstract_class(self):
         self.assertTrue(issubclass(Worker, ABC))
 
@@ -40,6 +50,20 @@ class TestWorker(unittest.TestCase):
             result = False, str(e)
         self.assertTrue(result[0], result[1])
 
+    def apply_color_scheme(self, text):
+        colored_text = ""
+        for line in text.split("\n"):
+            colored_line = self.color_scheme.apply_color_scheme(line)
+            colored_text += colored_line + "\n"
+        return colored_text
+
+    def print_colored_output(self, text):
+        colored_output = self.apply_color_scheme(text)
+        print(colored_output)
+
+
+        
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main(argv=[''], exit=False)
+
